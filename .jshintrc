@@ -1,4 +1,4 @@
 {
 	"browser": "true",
-	"predef": ["PouchDB", "console", "jQuery"]
+	"predef": ["PouchDB", "console", "jQuery","JSandbox"]
 }

@@ -1,3 +1,4 @@
+var gobalTestString = "TestSandbox Gobal Var";
 
 var cal_sum = 'function cal_sum (line){var numbers = line.split(" ");return numbers[0] + numbers[1];}';
 var cal_sub = 'function cal_sub (line){var numbers = line.split(" ");return numbers[0] - numbers[1];}';
