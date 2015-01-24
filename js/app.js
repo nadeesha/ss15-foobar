@@ -1,24 +1,25 @@
-(function(termish, PouchDB, console) {
+(function(termish, PouchDB, console, $) {
 
     'use strict';
 
     termish.db = new PouchDB('termish');
 
-    termish.installScript = function(name, version, fn) {
-        fn = fn || 'console.log(this);';
+    termish.installScript = function(name, gistUrl) {
+        $.get(gistUrl, saveToDb);
 
-        termish.db.post({
-            type: 'script',
-            name: name,
-            version: version,
-            fn: fn
-        }, function(err) {
-            if (!err) {
-                console.log('script saved');
-            } else {
-                console.log(err);
-            }
-        });
+        function saveToDb(fn) {
+            termish.db.post({
+                type: 'script',
+                name: name,
+                fn: fn
+            }, function(err) {
+                if (!err) {
+                    console.log('script saved');
+                } else {
+                    console.log(err);
+                }
+            });
+        }
     };
 
     termish.executeScript = function(name, args) {
@@ -44,4 +45,4 @@
         });
     };
 
-})(window.termish = window.termish || {}, PouchDB, console);
+})(window.termish = window.termish || {}, PouchDB, console, jQuery);
