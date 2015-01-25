@@ -12,7 +12,9 @@ This is a static site! 'nuff said.
 
 Because it's fun and profitable to write javascript to do all kinds of stuff. And using a terminal makes jack a very productive boy!
 
+Right now, we have some very simple use cases covered, as evidenced in the `repo` folder. But this is far from it's potential.
+
 Some potentially cool uses:
     `tweeface <message>` will tweet a message to your twitter feed and publish to facebook as well.
-    `gcal <meeting at 5>` will book your google calendar.
-    `pocket <url> <reminder at 9am>` will add the url to your pocket and remind you to read it at 9am using a reminder email.
+    `gcal "meeting at 5"` will book your google calendar.
+    `pocket <url> <time>` will add the url to your pocket and remind you to read it at the time using a reminder email.
