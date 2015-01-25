@@ -1,19 +1,44 @@
 <html>
 
-<head></head>
+<head>
+	<title>Foobar</title>
+	<style type="text/css">
+		#input{
+			width: 100%;
+			background: #333;
+			padding: 0.5em;
+			overflow: auto;
+			font-size: 14px;
+			word-wrap: break-word;
+			border-color: rgb(169, 169, 169);
+			color: #FFFFFF;
+			font-family: monospace;
+		}
+		#output{
+			width: 100%;
+			padding: 0.5em;
+			overflow: auto;
+			font-size: 14px;
+			word-wrap: break-word;
+			border-color: rgb(169, 169, 169);
+			color: #000;
+			font-family: monospace;
+		}
+	</style>
+</head>
 
 <body>
-    <input type="text" id="input" class="form-control" required="required" placeholder="insert your command here..." style="width: 100%;">
+	<input type="text" id="input" class="form-control" required="required" placeholder="insert your command here..." style="">
 
-    <div id="output" style="background-color:lightgrey;">
-        command output here...
-    </div>
+	<div id="output" style="background-color:lightgrey;">
+		command output here...
+	</div>
 
-    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
-    <script type="text/javascript" src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
+	<script type="text/javascript" src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
 
-    <script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
 </body>
 
 </html>
