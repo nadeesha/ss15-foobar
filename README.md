@@ -1,24 +1,18 @@
-# write a custom script
-It's plain old javascript. To write to the console output, use `stdout('message')`. If you're connecting to an external endpoint, domian should be defined in the `definition.json` file. If you need to edit the html of the output pane (like appending a twitter login button) write the html to stdout.
+# Termish
 
-# install a custom script
-```sh
-termish install <definition url>
-```
-ex: `termish install https://rawgit.com/ncthis/0a905be2372e62756f96/raw/61275089d60d117733b2d362863c3ab8718f5182/contributors.json`
+A javascript based terminal for the web, by the web, to control the web. It let's you write your javascript scripts (or from other script authors), host them at a remote location, and run them from a terminal, in a safe, secure, sandboxed environment to do all kinds of stuff.
 
-NOTE: definition url must be served with `Content-Type: application/json` header.
+Check out the `repo` directort for some sample scripts that we wrote.
 
-# run the script
-```sh
-<command name> <arguments>
-```
-ex: `ghcontribs3 ncthis/hackertalk`
+# Running
 
-# definition format
-```json
-{
-    "name": "ghcontribs3",
-    "endpoints": ["api.github.com"],
-    "scriptUrl": "https://rawgit.com/ncthis/6fa481eaceaf96ef6394/raw/0d8db4b2c6db266fed87b63d955d2947e2b1f0f2/contibutors.js" // must be served with the header 'Content-type: text/javascript'
-}
+This is a static site! 'nuff said.
+
+# Why?
+
+Because it's fun and profitable to write javascript to do all kinds of stuff. And using a terminal makes jack a very productive boy!
+
+Some potentially cool uses:
+    `tweeface <message>` will tweet a message to your twitter feed and publish to facebook as well.
+    `gcal <meeting at 5>` will book your google calendar.
+    `pocket <url> <reminder at 9am>` will add the url to your pocket and remind you to read it at 9am using a reminder email.
