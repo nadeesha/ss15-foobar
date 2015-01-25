@@ -26,8 +26,43 @@
         return def;
     }
 
-    termish.installScript = function(url, cb) {
-        $.get(url, parseDefinition);
+    function loadRepo() {
+        function findRepo(doc, emit) {
+            if (doc.type === 'repo') {
+                emit(doc);
+            }
+        }
+
+        termish.db.query({
+            map: findRepo
+        }, {
+            include_docs: true
+        }, function(err, response) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            if (response.rows.length === 1) {
+                termish.repo = response.rows[0].doc.url;
+
+                if (termish.repo[termish.repo.length - 1] !== '/') {
+                    termish.repo += '/';
+                }
+
+                console.log('repo set at: ' + termish.repo);
+            } else {
+                console.log('invalid settings for repo found');
+            }
+        });
+    }
+
+    loadRepo();
+
+    termish.installScript = function(scriptName, cb) {
+        var definitionJson = termish.repo + scriptName + '/definition.json';
+
+        $.get(definitionJson, parseDefinition);
 
         function parseDefinition(json) {
             var definition = null;
@@ -79,7 +114,7 @@
         }
     };
 
-    termish.executeScript = function(name, args) {
+    termish.executeScript = function(name, args, cb) {
         function findLatestScript(doc, emit) {
             if (doc.type === 'script' && doc.name === name) {
                 emit(doc);
@@ -92,9 +127,9 @@
             include_docs: true
         }, function(err, response) {
             if (err) {
-                console.log(err);
+                cb(err);
             } else if (response.rows.length === 0) {
-                console.log('no scripts found by that name');
+                cb('invalid command: ' + name);
             } else {
                 var definition = response.rows[0].doc;
 
@@ -122,7 +157,7 @@
                             stdout: termish.services.stdout
                         });
 
-                        frame.code(definition.scriptUrl).run();
+                        frame.code(termish.repo + definition.name + '/' + definition.scriptUrl).run();
                     });
             }
         });
@@ -140,7 +175,7 @@
         if (cmd[0] === 'termish') {
             termish.commands[cmd[1]](cmd.slice(2), termish.sendOutput);
         } else {
-            termish.executeScript(cmd[0], cmd.slice(1));
+            termish.executeScript(cmd[0], cmd.slice(1), termish.sendOutput);
         }
     };
 
@@ -167,7 +202,12 @@
     termish.commands = {
         install: function(args, cb) {
             termish.installScript(args[0], function(err) {
-                cb(err || 'script saved');
+                if (err) {
+                    cb(err);
+                    return;
+                }
+
+                cb(null, 'successfully installed: ghcontribs');
             });
         },
         list: function(args, cb) {
@@ -220,6 +260,55 @@
                 termish.db.remove(doc, function(err) {
                     cb(err, [doc.name + ' uninstalled successfully']);
                 });
+            });
+        },
+        'set-repo': function(args, cb) {
+            function findRepo(doc, emit) {
+                if (doc.type === 'repo') {
+                    emit(doc);
+                }
+            }
+
+            termish.db.query({
+                map: findRepo
+            }, {
+                include_docs: true
+            }, function function_name(err, response) {
+                if (err) {
+                    cb(err);
+                    return;
+                }
+
+                if (!response || response.rows.length === 0) {
+                    termish.db.post({
+                        type: 'repo',
+                        url: args[0]
+                    }, function(err) {
+                        if (err) {
+                            cb(err);
+                            return;
+                        }
+
+                        cb(null, 'new repo url set successfully to: ' + args[0]);
+
+                        loadRepo();
+                    });
+                } else {
+                    var doc = response.rows[0].doc;
+
+                    doc.url = args[0];
+
+                    termish.db.put(doc, function(err) {
+                        if (err) {
+                            cb(err);
+                            return;
+                        }
+
+                        cb(null, 'new repo url set successfully to: ' + args[0]);
+
+                        loadRepo();
+                    });
+                }
             });
         }
     };

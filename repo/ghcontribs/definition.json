@@ -1,0 +1,5 @@
+{
+    "name": "ghcontribs",
+    "endpoints": ["api.github.com"],
+    "scriptUrl": "init.js"
+}
