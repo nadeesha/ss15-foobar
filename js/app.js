@@ -213,7 +213,7 @@
                     return;
                 }
 
-                cb(null, 'successfully installed: '+args[0]);
+                cb(null, 'successfully installed: ' + args[0]);
             });
         },
         list: function(args, cb) {
