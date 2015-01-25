@@ -145,18 +145,81 @@
     };
 
     termish.sendOutput = function(err, data) {
-        if(_.isObject(data)) {
-            // todo:  format console output for json
-            data = JSON.stringify(data);
+        var className = 'console-output';
+
+        if (err) {
+            className += ' error';
         }
 
-        termish.output.html(err || data);
+        var out = err || data;
+
+        if (!_.isArray(out)) {
+            out = [out];
+        }
+
+        out = _.map(out, function(line) {
+            return '<p class="' + className + '">' + line + '</p>';
+        });
+
+        termish.output.html(out);
     };
 
     termish.commands = {
         install: function(args, cb) {
             termish.installScript(args[0], function(err) {
                 cb(err || 'script saved');
+            });
+        },
+        list: function(args, cb) {
+            function findAllScripts(doc, emit) {
+                if (doc.type === 'script') {
+                    emit(doc);
+                }
+            }
+
+            termish.db.query({
+                map: findAllScripts
+            }, {
+                include_docs: true
+            }, function function_name(err, response) {
+                if (err) {
+                    cb(err);
+                    return;
+                }
+
+                var scripts = _.map(response.rows, function(row) {
+                    return row.doc.name;
+                });
+
+                cb(null, scripts);
+            });
+        },
+        remove: function(args, cb) {
+            function findScript(doc, emit) {
+                if (doc.type === 'script' && doc.name === args[0]) {
+                    emit(doc);
+                }
+            }
+
+            termish.db.query({
+                map: findScript
+            }, {
+                include_docs: true
+            }, function function_name(err, response) {
+                if (err) {
+                    cb(err);
+                    return;
+                }
+
+                if (!response || response.rows.length === 0) {
+                    cb(['no such script available']);
+                }
+
+                var doc = response.rows[0].doc;
+
+                termish.db.remove(doc, function(err) {
+                    cb(err, [doc.name + ' uninstalled successfully']);
+                });
             });
         }
     };
