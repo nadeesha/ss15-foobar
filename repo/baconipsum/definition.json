@@ -1,0 +1,5 @@
+{
+    "name": "baconipsum",
+    "endpoints": ["baconipsum.com", "ajax.googleapis.com"],
+    "scriptUrl": "init.js"
+}
