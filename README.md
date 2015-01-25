@@ -1,4 +1,6 @@
 # install a custom script
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/staticshowdown/ss15-foobar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ```sh
 termish install <command name> <raw gist url>
 ```
