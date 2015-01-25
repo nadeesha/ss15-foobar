@@ -179,11 +179,16 @@
         }
     };
 
-    termish.sendOutput = function(err, data) {
+    termish.sendOutput = function(err, data, type) {
         var className = 'console-output';
 
         if (err) {
             className += ' error';
+        }
+
+        if (type && type === 'html') {
+            termish.output.html(data);
+            return;
         }
 
         var out = err || data;
@@ -310,6 +315,9 @@
                     });
                 }
             });
+        },
+        help: function (args, cb) {
+            cb(null, termish.helpText, 'html');
         }
     };
 
@@ -319,5 +327,7 @@
             stdout: caja.tame(termish.sendOutput)
         };
     });
+
+    termish.helpText = termish.output.html();
 
 })(window.termish = window.termish || {}, PouchDB, console, jQuery, swal, _, caja);

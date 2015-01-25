@@ -6,10 +6,41 @@
 </head>
 
 <body>
-    <input type="text" id="input" class="form-control" required="required" placeholder="insert your command here..." style="width: 100%;">
+    <input type="text" id="input" class="form-control" required="required" placeholder="insert your command here... to get help: termish help" style="width: 100%;">
 
-    <div id="output" style="background-color:lightgrey;">
-        command output here...
+    <div id="output">
+        <p class="console-out">> Welcome to termish!</p>
+        <p class="console-out">A javascript based terminal on your browser to control the web.</p>
+        <p class="console-out">Termish runs javscript scripts that help you access content, automate stuff,</p>
+        <p class="console-out">access APIs, and whatever else you need in a safe sandboxed environment.</p>
+        <p class="console-out">---</p>
+        <p class="console-out">> Setting your scripts repo</p>
+        <p class="console-out">You can load termish scripts from anywhere on the web.</p>
+        <p class="console-out">For the moment, we have some sample scripts on this site.</p>
+        <p class="console-out">You can set the repo home by doing:</p>
+        <p class="console-out indent-1">termish set-repo repourl</p>
+        <p class="console-out indent-1">ex: termish set-repo http://localhost:5000/repo/</p>
+        <p class="console-out">Now you can install any script from this location</p>
+        <p class="console-out">---</p>
+        <p class="console-out">> Installing scripts from your repo</p>
+        <p class="console-out">A folder in a repo will consist of a definition.json file</p>
+        <p class="console-out">and one or more scripts. To install this script on your</p>
+        <p class="console-out">termish, simply do:</p>
+        <p class="console-out indent-1">termish install foldername</p>
+        <p class="console-out indent-1">ex: termish install ghcontribs</p>
+        <p class="console-out">---</p>
+        <p class="console-out">> Executing scripts</p>
+        <p class="console-out">And now you can run the script by giving the correct args:</p>
+        <p class="console-out indent-1">ex: ghcontribs ncthis/hackertalk</p>
+        <p class="console-out">---</p>
+        <p class="console-out">> Listing scripts</p>
+        <p class="console-out">To list all the scripts installed in your termish:</p>
+        <p class="console-out indent-1">termish list</p>
+        <p class="console-out">---</p>
+        <p class="console-out">> Removing scripts</p>
+        <p class="console-out">To remove scripts, simply do:</p>
+        <p class="console-out indent-1">termish remove scriptname</p>
+        <p class="console-out indent-1">ex: termish remove ghcontribs</p>
     </div>
 
     <script type="text/javascript" src="//caja.appspot.com/caja.js"></script>
