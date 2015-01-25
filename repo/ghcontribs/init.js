@@ -2,8 +2,10 @@
 
 var request = new XMLHttpRequest();
 
-if (!args || !args.length !== 1) {
-    stdout('usage: ghcontribs github-user/github-repo');
+debugger;
+
+if (!args || args.length !== 1) {
+    stdout('usage: ghcontribs &lt;github-user/github-repo&gt;');
     return;
 }
 
@@ -21,7 +23,7 @@ request.onreadystatechange = function() {
     var contribs = JSON.parse(request.responseText);
 
     contribs = contribs.map(function(contrib) {
-        return contrib.login + ' => ' + contrib.contributions + ' contributions';
+        return contrib.login + ' => ' + contrib.contributions + ' commits';
     });
 
     var contributors = ['contributors found: ' + contribs.length].concat(contribs);
