@@ -1,4 +1,4 @@
-(function(termish, PouchDB, console, $) {
+(function(termish, PouchDB, console, $, alert, _, caja) {
 
     'use strict';
 
@@ -6,16 +6,75 @@
     termish.input = $('#input');
     termish.output = $('#output');
 
-    termish.installScript = function(name, gistUrl, cb) {
-        $.get(gistUrl, saveToDb);
+    function validateDefinition(def) {
+        if (!def) {
+            throw ('no definition supplied');
+        }
 
-        function saveToDb(fn) {
-            termish.db.post({
-                type: 'script',
-                name: name,
-                fn: fn
-            }, function(err) {
+        if (!def.name) {
+            throw ('definition must contain a valid name');
+        }
+
+        if (def.endpoints && !_.isArray(def.endpoints)) {
+            throw ('endpoints must be defined as an array');
+        }
+
+        if (!def.scriptUrl) {
+            throw ('a script url must be supplied');
+        }
+
+        return def;
+    }
+
+    termish.installScript = function(url, cb) {
+        $.get(url, parseDefinition);
+
+        function parseDefinition(json) {
+            var definition = null;
+
+            try {
+                definition = validateDefinition(json);
+            } catch (err) {
                 cb(err);
+                return;
+            }
+
+            if (definition.endpoints && definition.endpoints.length > 0) {
+                askForPermission(definition.endpoints, function(confirmed) {
+                    if (!confirmed) {
+                        cb('script installation cancelled');
+                    } else {
+                        saveToDb(definition);
+                    }
+                });
+            } else {
+                saveToDb(definition);
+            }
+        }
+
+        function askForPermission(endpoints, handleConfirmation) {
+            alert({
+                title: 'Are you sure?',
+                text: 'This script will be able to communicate with the following url(s): ' + endpoints.join(', '),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No, cancel installation!',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, handleConfirmation);
+        }
+
+        function saveToDb(definition) {
+            termish.db.post(_.extend(definition, {
+                type: 'script'
+            }), function(err) {
+                if (err) {
+                    cb(err);
+                } else {
+                    cb(null, 'script installed successfully');
+                }
             });
         }
     };
@@ -23,7 +82,7 @@
     termish.executeScript = function(name, args) {
         function findLatestScript(doc, emit) {
             if (doc.type === 'script' && doc.name === name) {
-                emit(doc.fn);
+                emit(doc);
             }
         }
 
@@ -37,9 +96,34 @@
             } else if (response.rows.length === 0) {
                 console.log('no scripts found by that name');
             } else {
-                var Fn = eval('(' + response.rows[0].key + ')'); // ugh!
-                var fn = new Fn(args);
-                fn.exec(termish.sendOutput);
+                var definition = response.rows[0].doc;
+
+                var uriPolicy = {
+                    rewrite: function(url) {
+                        var allowed = _.find(definition.endpoints, function(endpoint) {
+                            return url.domain_ === endpoint;
+                        });
+
+                        if (allowed) {
+                            return url;
+                        } else {
+                            return undefined;
+                        }
+                    }
+                };
+
+                caja.load(
+                    document.getElementById('output'),
+                    uriPolicy, // set network access here
+                    function(frame) {
+
+                        frame.api({
+                            args: caja.tame(args),
+                            stdout: termish.services.stdout
+                        });
+
+                        frame.code(definition.scriptUrl).run();
+                    });
             }
         });
     };
@@ -61,15 +145,27 @@
     };
 
     termish.sendOutput = function(err, data) {
+        if(_.isObject(data)) {
+            // todo:  format console output for json
+            data = JSON.stringify(data);
+        }
+
         termish.output.html(err || data);
     };
 
     termish.commands = {
         install: function(args, cb) {
-            termish.installScript(args[0], args[1], function(err) {
+            termish.installScript(args[0], function(err) {
                 cb(err || 'script saved');
             });
         }
     };
 
-})(window.termish = window.termish || {}, PouchDB, console, jQuery);
+    caja.whenReady(function() {
+        caja.markFunction(termish.sendOutput);
+        termish.services = {
+            stdout: caja.tame(termish.sendOutput)
+        };
+    });
+
+})(window.termish = window.termish || {}, PouchDB, console, jQuery, swal, _, caja);
