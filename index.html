@@ -1,6 +1,9 @@
 <html>
 
-<head></head>
+<head>
+    <link rel="stylesheet" type="text/css" href="bower_components/sweetalert/lib/sweet-alert.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+</head>
 
 <body>
     <input type="text" id="input" class="form-control" required="required" placeholder="insert your command here..." style="width: 100%;">
@@ -9,11 +12,16 @@
         command output here...
     </div>
 
+    <script type="text/javascript" src="//caja.appspot.com/caja.js"></script>
+
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
     <script type="text/javascript" src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
+    <script type="text/javascript" src="bower_components/sweetalert/lib/sweet-alert.min.js"></script>
 
+    <script type="text/javascript" src="js/init.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
+
 </body>
 
 </html>
