@@ -1,0 +1,5 @@
+{
+    "name": "youtube",
+    "endpoints": ["gdata.youtube.com"],
+    "scriptUrl": "init.js"
+}

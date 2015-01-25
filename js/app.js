@@ -206,13 +206,14 @@
 
     termish.commands = {
         install: function(args, cb) {
+          console.log(args);
             termish.installScript(args[0], function(err) {
                 if (err) {
                     cb(err);
                     return;
                 }
 
-                cb(null, 'successfully installed: ghcontribs');
+                cb(null, 'successfully installed: '+args[0]);
             });
         },
         list: function(args, cb) {
