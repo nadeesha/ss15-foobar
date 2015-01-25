@@ -2,8 +2,6 @@
 
 var request = new XMLHttpRequest();
 
-debugger;
-
 if (!args || args.length !== 1) {
     stdout('usage: ghcontribs &lt;github-user/github-repo&gt;');
     return;

@@ -7,7 +7,7 @@ if (!args || args.length === 0) {
     return;
 }
 
-request.open('GET', 'http://gdata.youtube.com/feeds/api/videos?vq=' + args.join(' ') + '&alt=json', true);
+request.open('GET', 'https://gdata.youtube.com/feeds/api/videos?vq=' + args.join(' ') + '&alt=json', true);
 
 request.onreadystatechange = function() {
     if (request.readyState !== 4) {

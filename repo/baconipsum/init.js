@@ -11,7 +11,7 @@ var xhr = function() {
     };
 }();
 
-xhr('get', 'http://baconipsum.com/api/?type=meat-and-filler', function(response) {
+xhr('get', 'https://baconipsum.com/api/?type=meat-and-filler', function(response) {
     if (response && response.length > 0) {
         stdout(null, JSON.parse(response));
     }
