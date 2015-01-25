@@ -1,5 +1,6 @@
 {
     "name": "baconipsum",
     "endpoints": ["baconipsum.com", "ajax.googleapis.com"],
-    "scriptUrl": "init.js"
+    "scriptUrl": "init.js",
+    "description": "Generates lorem ipsum with bacon goodness"
 }

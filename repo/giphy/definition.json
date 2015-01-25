@@ -1,5 +1,6 @@
 {
     "name": "giphy",
     "endpoints": ["api.giphy.com"],
-    "scriptUrl": "init.js"
+    "scriptUrl": "init.js",
+    "description": "Get random gifs for your keywords from Giphy"
 }

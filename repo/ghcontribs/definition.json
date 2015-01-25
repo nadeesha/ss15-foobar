@@ -1,5 +1,6 @@
 {
     "name": "ghcontribs",
     "endpoints": ["api.github.com"],
-    "scriptUrl": "init.js"
+    "scriptUrl": "init.js",
+    "description": "Find out who contributed to a github repo and the commit count"
 }
