@@ -1,0 +1,5 @@
+{
+    "name": "giphy",
+    "endpoints": ["api.giphy.com"],
+    "scriptUrl": "init.js"
+}
